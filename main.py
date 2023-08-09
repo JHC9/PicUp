@@ -10,23 +10,28 @@ db.close()
 app = Flask(__name__)
 
 
-@app.route('/', methods = ['GET','POST'])
+@app.route('/', methods=['GET', 'POST'])
 def home():
   if request.method == 'POST' and \
   request.files and 'photo' in request.files:
-    # get file
+    #get file
     photo = request.files['photo']
-    # protect 
+    #protect
     filename = secure_filename(photo.filename)
-    # form and save file
-    path = os.path.join('uploads', filename)
-    photo.save(path)
-    # add filename to database
+    #form and save file
+    path = os.path.join('uploads',filename) #since we are creating multiple path it just joins it??
+    #add filename to database
     db = sqlite3.connect('album.db')
-    db.execute("INSERT INTO photos(photo) VALUES(?)", (filename,))
+    db.execute("INSERT INTO photos(photo) VALUES(?)", (filename, )) #to make python treat is as tuple so that the sql injection will not work
     db.commit()
+
     db.close()
+
+
+
+  
   return render_template('index.html')
+
 
 @app.route('/view')
 def view():
@@ -36,11 +41,12 @@ def view():
   for rec in recs:
     pics.append(rec[0])
   db.close()
-  return render_template('view.html',pics = pics)
+  return render_template('view.html', pics=pics)
+
 
 @app.route('/photos/<filename>')
 def get_file(filename):
-  return send_from_directory('uploads', filename)
-  
+  return send_from_directory('uploads', filename) #redirecting to the path we made 
+
 
 app.run(host='0.0.0.0', port=81)
