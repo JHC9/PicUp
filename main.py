@@ -3,7 +3,7 @@ from werkzeug.utils import secure_filename
 import os, sqlite3
 
 db = sqlite3.connect('album.db')
-db.execute("CREATE TABLE IF NOT EXISTS photos(photo TEXT); ")
+db.execute("CREATE TABLE IF NOT EXISTS photos (pid INTEGER PRIMARY KEY, photo TEXT); ")
 db.commit()
 db.close()
 
@@ -27,7 +27,7 @@ def home():
 
     db.close()
 
-
+evon lm,m,mm
 
   
   return render_template('index.html')
